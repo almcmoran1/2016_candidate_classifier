@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Presidential Candidate Classification</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+
+<h3>Your candidate's quote:</h3>
+<div>{{ content }}</div>
+
+<h3>Prediction:</h3>
+<div>This quote likely came from <strong>{{ prediction }}</strong>
+</div>
+
+<div id='button'>
+	  <form action="/">
+	    <input type=submit value='Submit another review'>
+	  </form>
+</div>
+
+  </body>
+</html>
