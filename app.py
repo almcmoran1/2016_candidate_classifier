@@ -1,12 +1,13 @@
+#Source - The template for this app can be found in chapter 9 of Sebastian Raschka's 
+#"Python Machine Learning".  I have modified the template to work for my classifier
+
 from flask import Flask, render_template, request
 from wtforms import Form, TextAreaField, validators
 import pickle
-#import sqlite3
 import os
 import numpy as np
 
-# import HashingVectorizer from local dir
-#from vectorizer import vect
+
 
 app = Flask(__name__)
 
@@ -18,31 +19,14 @@ clf = pickle.load(open(os.path.join(cur_dir,
 vec = pickle.load(open(os.path.join(cur_dir,
                  'pkl_objects',
                  'Countvec.pkl'), 'rb'))
-#db = os.path.join(cur_dir, 'reviews.sqlite')
+
 
 def classify(document):
-    #label = {0: 'negative', 1: 'positive'}
     X = vec.transform([document])
-    y = clf.predict(X)
-    if y == "TRUMP:":
-        return "Donald Trump"
-    elif y == "CLINTON:":
-        return "Hilary Clinton"
-    elif y == "SANDERS:":
-        return "Bernie Sanders"
-    elif y == "CRUZ:":
-        return "Ted Cruz"
-    else:
-        return "John Kasich"
-    #y = y[:-3]
-    #y = y[1:]
-    #proba = np.max(clf.predict_proba(X))
-    #return y
-
-#def train(document, y):
-#    X = vect.transform([document])
-#    clf.partial_fit(X, [y])
-
+    y = clf.predict(X)[0]
+    candict = {"TRUMP:":"Donald Trump","CLINTON:":"Hilary Clinton","SANDERS:":"Bernie Sanders",
+                "CRUZ:":"Ted Cruz", "KASICH:":"John Kasich"}
+    return candict[y]
 
 ######## Flask
 class ReviewForm(Form):
@@ -68,16 +52,6 @@ def results():
 
 @app.route('/thanks', methods=['POST'])
 def feedback():
-#    feedback = request.form['feedback_button']
-#    review = request.form['review']
-#    prediction = request.form['prediction']
-#
-#    inv_label = {'negative': 0, 'positive': 1}
-#    y = inv_label[prediction]
-#    if feedback == 'Incorrect':
-#        y = int(not(y))
-#    train(review, y)
-#    sqlite_entry(db, review, y)
     return render_template('thanks.html')
 if __name__ == '__main__':
     app.run(debug=True)
